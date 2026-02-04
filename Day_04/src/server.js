@@ -7,7 +7,7 @@ const app = require('./app')
 const mongoose = require("mongoose");
 
 function connectToDb(){
-    mongoose.connect("")
+    mongoose.connect("")// you have to put databse link to connect 
     .then(()=>{
         console.log("connected to db")
     })
