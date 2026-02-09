@@ -25,10 +25,18 @@ html{
 }
 
 .note{
-  background-color: #636363;
+  background-color: #4e4c4c;
   padding: 1rem;
   border-radius: 0.7rem;
   max-width: 20rem;
-  color: white;
+  color: rgb(244, 238, 238);
+
+}
+
+.note-create-form{
+  display: flex;
+  gap: 1rem;
+  padding-inline: 3rem;
+  padding-block: 1rem;
 
 }

@@ -4,11 +4,14 @@
 const express = require("express")
 const noteModel = require('./models/note.model')
 const cors = require("cors")
+const path = require("path")
 
 const app = express();
 
-app.use(cors())
-app.use(express.json())
+app.use(cors())   //this middleware is used to performs cross origin request 
+app.use(express.json()) // this is used for api jason formating
+app.use(express.static("./public")) // this middleware handles  the api req which ahs not created and returns html file in response 
+
 
 
 // creating note by using post api 
@@ -59,6 +62,12 @@ app.patch('/api/notes/:id' , async (req , res ) =>{
         message: "Note updated successfully."
     })
 
+})
+
+
+// this code handles the unknown requests on api and returns html file 
+app.use("*name", (req, res ) => {
+    res.sendFile(path.join(__dirname,"..","/public/index.html"))
 })
 
 module.exports = app
