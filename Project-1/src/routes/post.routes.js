@@ -8,5 +8,9 @@
 
     postRouter.post("/",upload.single("image"), postController.createPostController)
 
+    postRouter.get("/", postController.getPostController)
+
+    postRouter.get("/posts/details/:postId", postController.getPostdetailsController)
+
 
     module.exports = postRouter
