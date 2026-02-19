@@ -12,33 +12,6 @@ const imagekit = new Imagekit({
 // creating post api to create post 
 async function createPostController( req, res) {
 
-    console.log(req.body, req.file)
-
-    const token = req.cookies.token // getting token from users cookie
-    
-    if(!token){
-        return res.status(401).json(
-            {
-                message : " Unauthorized Access"
-            }
-            
-    
-        )
-    }
-
-    let decoded = null
-    
-    try {  
-        decoded = jwt.verify(token,process.env.JWT_SECRET) // verifying token valid or not
-    } catch (err) {
-        return res.status({
-            message: " User is not  authorized"  // err message if not valid
-        })
-    }
-
-    
-
-    console.log(decoded)
 
     //uploading created post on imagekit
     const file = await imagekit.files.upload({
@@ -51,7 +24,7 @@ async function createPostController( req, res) {
     const post = await postModel.create({
         caption: req.body.caption,
         imgUrl: file.url,
-        user: decoded.id 
+        user: req.user.id 
     })
 
     res.status(201).json({
@@ -62,27 +35,8 @@ async function createPostController( req, res) {
 
 // api for fetching post data
 async function getPostController( req , res){
-    const token = req.cookies.token
 
-    if(!token){
-            return res.status(401).json(
-                {
-                    message:"User Unauthorized"
-                }
-            )
-        } 
-
-    let decoded = null
-    try{
-    decoded = jwt.verify(token, process.env.JWT_SECRET)
-    } catch(err){
-            return res.status(401).json(
-                {
-                    message: "Token Invalid"
-                }
-            )
-    }
-    const userId  = decoded.id
+    const userId  = req.user.id
 
     const posts = await postModel.find({
         user : userId
@@ -97,26 +51,9 @@ async function getPostController( req , res){
 
 // api for fetching post details by userId as params
 async function getPostdetailsController(req , res){
-        const token = req.cookies.token
+    
 
-        if(!token){
-            return res.status(401).json(
-                {
-                    message:"User Unauthorized"
-                }
-            )
-        }
-
-        let decoded = null;
-        try{
-            decoded = jwt.verify(token , process.env.JWT_SECRET)
-        }catch(err){
-            return res.status(401).json({
-                message: " Token is not valid"
-            })
-        }
-
-        const userId = decoded.id
+        const userId = req.user.id
         const postId = req.params.postId
 
         const post =  await postModel.findById(postId)
